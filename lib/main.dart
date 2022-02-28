@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,41 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 Navigator.of(context).pushNamed(RouterPath.signInPath);
               },
               child: const Text('サインインはこちら'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Navigator.of(context).pushNamed(RouterPath.signInPath);
+                final userCredential =
+                    await FirebaseAuth.instance.signInAnonymously();
+                if (userCredential.user == null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('ログインエラー'),
+                        content: const Text('ログインに失敗しました。'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  return;
+                }
+
+                final snackbar = SnackBar(
+                  content: Text('ログインしました！ -- ${userCredential.user?.uid}'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
+                Navigator.of(context).pushNamed(RouterPath.mainPath);
+              },
+              child: const Text('ゲストの場合はこちら'),
             ),
           ],
         ),
