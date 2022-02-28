@@ -60,6 +60,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               '$counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            ElevatedButton(
+              onPressed: () {
+                // ref: https://qiita.com/maria_mari/items/6502f8d6e45d693f9ead
+                Navigator.of(context).pushNamed(RouterPath.mainPath);
+              },
+              child: const Text('move next page.'),
+            ),
           ],
         ),
       ),
