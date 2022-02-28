@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prememo/router.dart';
 import 'package:prememo/viewmodel/counter_controller.dart';
@@ -7,6 +9,8 @@ import 'package:prememo/viewmodel/counter_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  const fileName = kDebugMode ? '.env.dev' : '.env.prod';
+  await dotenv.load(fileName: fileName);
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -66,6 +70,12 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 Navigator.of(context).pushNamed(RouterPath.mainPath);
               },
               child: const Text('move next page.'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouterPath.signInPath);
+              },
+              child: const Text('サインインはこちら'),
             ),
           ],
         ),
