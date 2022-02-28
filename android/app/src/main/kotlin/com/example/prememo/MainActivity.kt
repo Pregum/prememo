@@ -1,4 +1,4 @@
-package com.example.prememo
+package jp.co.prememo
 
 import io.flutter.embedding.android.FlutterActivity
 

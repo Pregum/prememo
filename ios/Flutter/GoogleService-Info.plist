@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>645648885993-ck0eiu5eotv6u989pdho1v1ahidk2su1.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.645648885993-ck0eiu5eotv6u989pdho1v1ahidk2su1</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDDUae6zCce6uMkSLjUzwl6oHqBZ2BG0z8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>645648885993</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>jp.co.prememo</string>
+	<key>PROJECT_ID</key>
+	<string>prememo-6229a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>prememo-6229a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:645648885993:ios:00df256848877b6cb7a878</string>
+</dict>
+</plist>
