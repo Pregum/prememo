@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "645648885993",
+    "project_id": "prememo-6229a",
+    "storage_bucket": "prememo-6229a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645648885993:android:bf5ef83d2cf3d0b8b7a878",
+        "android_client_info": {
+          "package_name": "jp.co.prememo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645648885993-pq4mloaccjju8l9ecnrjo2i1p0uucifk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRJnJQTtEl93CFqCe30wzrDQodvCk8Gc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645648885993-pq4mloaccjju8l9ecnrjo2i1p0uucifk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
