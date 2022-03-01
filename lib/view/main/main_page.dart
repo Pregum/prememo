@@ -35,6 +35,12 @@ class _MainPageState extends ConsumerState<MainPage> {
       appBar: AppBar(
         title: const Text('メインページ'),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.create),
+        onPressed: () {
+          Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
+        },
+      ),
       drawer: Drawer(
         child: SingleChildScrollView(
           child: Column(
