@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -31,6 +32,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
+    final contentController = ref.watch(contentProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('メインページ'),
@@ -38,6 +40,7 @@ class _MainPageState extends ConsumerState<MainPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.create),
         onPressed: () {
+          contentController.setContent(Content.initialize());
           Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
         },
       ),
@@ -73,9 +76,12 @@ class _MainPageState extends ConsumerState<MainPage> {
                   final contentController = ref.watch(contentProvider.notifier);
                   contentController.setContent(
                     Content(
-                        content: 'this index $index...',
-                        id: 'content_$index',
-                        title: 'title $index'),
+                      content: 'this index $index...',
+                      id: 'content_$index',
+                      title: 'title $index',
+                      createdAt: Timestamp.now(),
+                      updatedAt: Timestamp.now(),
+                    ),
                   );
                   Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
                 },
