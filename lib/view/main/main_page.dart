@@ -40,26 +40,28 @@ class _MainPageState extends ConsumerState<MainPage> {
           return Hero(
             tag: 'content_$index',
             flightShuttleBuilder: _flightShuttleBuilder,
-            child: InkWell(
-              onTap: () {
-                final contentController = ref.watch(contentProvider.notifier);
-                contentController.setContent(
-                  Content(
-                      content: 'this index $index...',
-                      id: 'content_$index',
-                      title: 'title $index'),
-                );
-                Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
-              },
-              child: Container(
-                color: Colors.greenAccent,
-                height: (index % 5 + 1) * 100,
-                child: Center(
-                  child: Text(
-                    index.toString(),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  final contentController = ref.watch(contentProvider.notifier);
+                  contentController.setContent(
+                    Content(
+                        content: 'this index $index...',
+                        id: 'content_$index',
+                        title: 'title $index'),
+                  );
+                  Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
+                },
+                child: SizedBox(
+                  height: (index % 5 + 1) * 100,
+                  child: Center(
+                    child: Text(
+                      index.toString(),
+                    ),
                   ),
                 ),
               ),
+              color: Colors.greenAccent,
             ),
           );
         },
