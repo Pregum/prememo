@@ -6,8 +6,7 @@ final contentProvider = StateNotifierProvider<ContentController, Content>(
     (ref) => ContentController());
 
 class ContentController extends StateNotifier<Content> {
-  ContentController()
-      : super(Content(content: 'no content', id: '', title: 'no title'));
+  ContentController() : super(Content.initialize());
 
   void setContent(Content content) {
     state = content;

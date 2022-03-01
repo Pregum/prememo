@@ -13,18 +13,23 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   @override
   Widget build(BuildContext context) {
     final contentController = ref.watch(contentProvider);
+    final TextStyle style = Theme.of(context).textTheme.titleMedium!.copyWith(
+          fontSize: 24,
+          fontWeight: FontWeight.normal,
+        );
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        child: Hero(
-          tag: contentController.id,
-          child: Column(
-            children: <Widget>[
-              Text(contentController.title),
-              Text(contentController.content),
-            ],
+      body: Column(
+        children: <Widget>[
+          Hero(
+            tag: contentController.id,
+            child: Text(
+              contentController.title,
+              style: style,
+            ),
           ),
-        ),
+          Text(contentController.content),
+        ],
       ),
     );
   }

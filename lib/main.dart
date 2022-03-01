@@ -1,12 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prememo/router.dart';
+import 'package:prememo/viewmodel/account_controller.dart';
 import 'package:prememo/viewmodel/counter_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  const fileName = kDebugMode ? '.env.dev' : '.env.prod';
+  await dotenv.load(fileName: fileName);
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -43,8 +49,16 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final accountController = ref.read(accountProvider.notifier);
+    final authUser = FirebaseAuth.instance.currentUser;
+    accountController.setUser(authUser);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final counter = ref.watch(counterProvider);
+    final accountController = ref.watch(accountProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -53,19 +67,54 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
             ElevatedButton(
               onPressed: () {
                 // ref: https://qiita.com/maria_mari/items/6502f8d6e45d693f9ead
                 Navigator.of(context).pushNamed(RouterPath.mainPath);
               },
               child: const Text('move next page.'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(RouterPath.signInPath);
+              },
+              child: const Text('サインインはこちら'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Navigator.of(context).pushNamed(RouterPath.signInPath);
+                final userCredential =
+                    await FirebaseAuth.instance.signInAnonymously();
+                if (userCredential.user == null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('ログインエラー'),
+                        content: const Text('ログインに失敗しました。'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  return;
+                }
+
+                final snackbar = SnackBar(
+                  content: Text('ログインしました！ -- ${userCredential.user?.uid}'),
+                );
+                accountController.setUser(FirebaseAuth.instance.currentUser);
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
+                Navigator.of(context).pushNamed(RouterPath.mainPath);
+              },
+              child: const Text('ゲストの場合はこちら'),
             ),
           ],
         ),
