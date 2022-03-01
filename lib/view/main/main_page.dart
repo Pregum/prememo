@@ -13,6 +13,20 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
+  // ref: https://github.com/flutter/flutter/issues/30647
+
+  Widget _flightShuttleBuilder(
+      BuildContext flightContext,
+      Animation<double> animation,
+      HeroFlightDirection flightDirection,
+      BuildContext fromHeroContext,
+      BuildContext toHeroContext) {
+    return DefaultTextStyle(
+      style: DefaultTextStyle.of(toHeroContext).style,
+      child: toHeroContext.widget,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +39,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         itemBuilder: (context, index) {
           return Hero(
             tag: 'content_$index',
+            flightShuttleBuilder: _flightShuttleBuilder,
             child: InkWell(
               onTap: () {
                 final contentController = ref.watch(contentProvider.notifier);
