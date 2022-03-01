@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prememo/service/content_service.dart';
 import 'package:prememo/viewmodel/content_controller.dart';
+
+import '../../model/content.dart';
 
 class ContentCreatePage extends ConsumerStatefulWidget {
   const ContentCreatePage({Key? key}) : super(key: key);
@@ -18,7 +21,17 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
           fontWeight: FontWeight.normal,
         );
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final contentService = ref.watch(contentServiceProvider);
+              await contentService.create(Content.initialize());
+            },
+            icon: const Icon(Icons.save),
+          )
+        ],
+      ),
       body: Column(
         children: <Widget>[
           Hero(
