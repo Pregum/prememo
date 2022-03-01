@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prememo/router.dart';
+import 'package:prememo/viewmodel/account_controller.dart';
 import 'package:prememo/viewmodel/counter_controller.dart';
 
 Future<void> main() async {
@@ -48,8 +49,16 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final accountController = ref.read(accountProvider.notifier);
+    final authUser = FirebaseAuth.instance.currentUser;
+    accountController.setUser(authUser);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final counter = ref.watch(counterProvider);
+    final accountController = ref.watch(accountProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -58,13 +67,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
             ElevatedButton(
               onPressed: () {
                 // ref: https://qiita.com/maria_mari/items/6502f8d6e45d693f9ead
@@ -107,6 +109,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 final snackbar = SnackBar(
                   content: Text('ログインしました！ -- ${userCredential.user?.uid}'),
                 );
+                accountController.setUser(FirebaseAuth.instance.currentUser);
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
                 Navigator.of(context).pushNamed(RouterPath.mainPath);

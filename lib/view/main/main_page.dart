@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:prememo/model/content.dart';
 import 'package:prememo/router.dart';
+import 'package:prememo/viewmodel/account_controller.dart';
 import 'package:prememo/viewmodel/content_controller.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -29,8 +30,28 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final account = ref.watch(accountProvider);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('メインページ'),
+      ),
+      drawer: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text(account?.uid ?? 'no'),
+                accountEmail: const Text(''),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Text(account?.uid.substring(0, 3) ?? 'none'),
+                ),
+                currentAccountPictureSize: const Size(50, 50),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: MasonryGridView.count(
         itemCount: 30,
         crossAxisCount: 4,

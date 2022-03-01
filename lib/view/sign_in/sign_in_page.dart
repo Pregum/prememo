@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:prememo/viewmodel/account_controller.dart';
 
 import '../main/main_page.dart';
 
@@ -23,6 +24,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     // ref: https://firebase.flutter.dev/docs/ui/auth/integrating-your-first-screen
+    final accountController = ref.watch(accountProvider.notifier);
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
@@ -32,6 +34,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           );
         }
 
+        accountController.setUser(FirebaseAuth.instance.currentUser);
         return const MainPage();
       },
     );

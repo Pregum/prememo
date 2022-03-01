@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final accountProvider = StateNotifierProvider<AccountController, User?>(
@@ -7,8 +8,11 @@ final accountProvider = StateNotifierProvider<AccountController, User?>(
 class AccountController extends StateNotifier<User?> {
   AccountController() : super(null);
 
-  void setUser(User user) {
+  void setUser(User? user) {
     state = user;
+    if (kDebugMode) {
+      print('set user: $user');
+    }
   }
 
   void logout() {
