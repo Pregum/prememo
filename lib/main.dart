@@ -67,16 +67,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            // ref: https://qiita.com/maria_mari/items/6502f8d6e45d693f9ead
             ElevatedButton(
               onPressed: () {
-                // ref: https://qiita.com/maria_mari/items/6502f8d6e45d693f9ead
-                Navigator.of(context).pushNamed(RouterPath.mainPath);
-              },
-              child: const Text('move next page.'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(RouterPath.signInPath);
+                Navigator.of(context).pushNamed(RouterPath.authLoadingPath);
               },
               child: const Text('サインインはこちら'),
             ),
@@ -105,12 +99,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   );
                   return;
                 }
-
-                final snackbar = SnackBar(
-                  content: Text('ログインしました！ -- ${userCredential.user?.uid}'),
-                );
-                accountController.setUser(FirebaseAuth.instance.currentUser);
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
 
                 Navigator.of(context).pushNamed(RouterPath.mainPath);
               },

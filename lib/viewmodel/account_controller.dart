@@ -8,6 +8,10 @@ final accountProvider = StateNotifierProvider<AccountController, User?>(
 class AccountController extends StateNotifier<User?> {
   AccountController() : super(null);
 
+  void fetchMyAccount() {
+    state = FirebaseAuth.instance.currentUser;
+  }
+
   void setUser(User? user) {
     state = user;
     if (kDebugMode) {

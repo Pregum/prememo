@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'package:prememo/main.dart';
+import 'package:prememo/view/auth_loading/auth_loading_page.dart';
 import 'package:prememo/view/content/content_create_page.dart';
 import 'package:prememo/view/main/main_page.dart';
 
@@ -12,6 +12,7 @@ class RouterPath {
   static const contentCreatePath = '/content_create';
   static const signInPath = '/sign_in';
   static const signUpPath = '/sign_up';
+  static const authLoadingPath = '/auth_loading';
 }
 
 class RouterGenerator {
@@ -23,6 +24,8 @@ class RouterGenerator {
       case RouterPath.rootPath:
         return MaterialPageRoute(
             builder: (_) => const MyHomePage(title: 'hogehoge'));
+      case RouterPath.authLoadingPath:
+        return MaterialPageRoute(builder: (_) => const AuthLoadingPage());
       case RouterPath.mainPath:
         return MaterialPageRoute(builder: (_) => const MainPage());
       case RouterPath.contentCreatePath:
@@ -30,6 +33,7 @@ class RouterGenerator {
       case RouterPath.signInPath:
         return MaterialPageRoute(builder: (_) => const SignInPage());
       case RouterPath.signUpPath:
+
       default:
         return MaterialPageRoute(
             builder: (_) => const MyHomePage(title: 'default page.'));
