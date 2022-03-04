@@ -22,8 +22,11 @@ class RouterGenerator {
 
     switch (settings.name) {
       case RouterPath.rootPath:
-        return MaterialPageRoute(
-            builder: (_) => const MyHomePage(title: 'hogehoge'));
+        return PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const MyHomePage(title: 'prememo'),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        );
       case RouterPath.authLoadingPath:
         return MaterialPageRoute(builder: (_) => const AuthLoadingPage());
       case RouterPath.mainPath:

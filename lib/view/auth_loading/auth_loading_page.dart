@@ -6,6 +6,12 @@ import 'package:prememo/viewmodel/account_controller.dart';
 
 import '../main/main_page.dart';
 
+final streamProvider = StreamProvider.autoDispose<User?>((ref) {
+  return FirebaseAuth.instance.authStateChanges();
+});
+
+final shownProvider = StateProvider.autoDispose<bool>((ref) => false);
+
 class AuthLoadingPage extends ConsumerStatefulWidget {
   const AuthLoadingPage({Key? key}) : super(key: key);
 
@@ -16,16 +22,17 @@ class AuthLoadingPage extends ConsumerStatefulWidget {
 class _AuthLoadingPageState extends ConsumerState<AuthLoadingPage> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+    final sp = ref.watch(streamProvider);
+    final myUser = ref.watch(accountProvider.notifier);
+
+    return sp.when<Widget>(
+      loading: () => const SignInPage(),
+      error: (error, stack) => const Text('error'),
+      data: (user) {
+        if (user == null) {
           return const SignInPage();
         }
-
-        // ユーザー情報をproviderに設定
-        final myUser = ref.watch(accountProvider.notifier);
-        myUser.setUser(snapshot.data);
+        myUser.setUser(user);
         _showSnackbar(context);
         return const MainPage();
       },
@@ -38,6 +45,8 @@ class _AuthLoadingPageState extends ConsumerState<AuthLoadingPage> {
     );
     // ref: https://stackoverflow.com/questions/45409565/flutter-setstate-or-markneedsbuild-called-when-widget-tree-was-locked
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      // ref: https://stackoverflow.com/questions/69330128/snackbar-showing-twice-due-to-stacked-screen-flutter-how-can-i-avoid-it
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     });
   }

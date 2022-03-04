@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:prememo/main.dart';
 import 'package:prememo/model/content.dart';
 import 'package:prememo/router.dart';
 import 'package:prememo/viewmodel/account_controller.dart';
@@ -57,6 +59,17 @@ class _MainPageState extends ConsumerState<MainPage> {
                 ),
                 currentAccountPictureSize: const Size(50, 50),
               ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('ログアウト'),
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  final ac = ref.watch(accountProvider.notifier);
+                  ac.logout();
+                  await Navigator.of(context)
+                      .popAndPushNamed(RouterPath.rootPath);
+                },
+              )
             ],
           ),
         ),
