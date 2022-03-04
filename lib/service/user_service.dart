@@ -7,9 +7,16 @@ class UserService {
   static const _collectionPath = 'users';
 
   Future<User> create(User user) async {
-    final ret = await _instance.collection(_collectionPath).add(user.toJson());
-    user.id = ret.id;
+    await _instance.collection(_collectionPath).doc(user.id).set(user.toJson());
     return user;
+  }
+
+  Future<User?> get(String id) async {
+    final ret = await _instance.collection(_collectionPath).doc(id).get();
+    if (!ret.exists) {
+      return null;
+    }
+    return User.fromJson({'id': ret.id, ...ret.data()!});
   }
 
   Future<User> update(User user) async {

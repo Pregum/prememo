@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:prememo/main.dart';
 import 'package:prememo/model/content.dart';
 import 'package:prememo/router.dart';
 import 'package:prememo/viewmodel/account_controller.dart';
@@ -51,11 +50,11 @@ class _MainPageState extends ConsumerState<MainPage> {
           child: Column(
             children: [
               UserAccountsDrawerHeader(
-                accountName: Text(account?.uid ?? 'no'),
+                accountName: Text(account?.id ?? 'no'),
                 accountEmail: const Text(''),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Text(account?.uid.substring(0, 3) ?? 'none'),
+                  child: Text(account?.id ?? 'none'),
                 ),
                 currentAccountPictureSize: const Size(50, 50),
               ),

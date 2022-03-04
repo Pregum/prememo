@@ -5,6 +5,7 @@ import 'package:prememo/view/sign_in/sign_in_page.dart';
 import 'package:prememo/viewmodel/account_controller.dart';
 
 import '../main/main_page.dart';
+import '../../model/user.dart' as my;
 
 final streamProvider = StreamProvider.autoDispose<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
@@ -32,9 +33,19 @@ class _AuthLoadingPageState extends ConsumerState<AuthLoadingPage> {
         if (user == null) {
           return const SignInPage();
         }
-        myUser.setUser(user);
-        _showSnackbar(context);
-        return const MainPage();
+
+        return FutureBuilder(
+            future: myUser.createIfAbsent(user),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container(
+                    color: Colors.white,
+                    child: const Center(
+                        child: CircularProgressIndicator.adaptive()));
+              }
+              _showSnackbar(context);
+              return const MainPage();
+            });
       },
     );
   }
@@ -50,6 +61,4 @@ class _AuthLoadingPageState extends ConsumerState<AuthLoadingPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     });
   }
-
-  bool fetchIsFirstBoot() => false;
 }
