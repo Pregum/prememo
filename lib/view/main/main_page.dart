@@ -54,11 +54,16 @@ class _MainPageState extends ConsumerState<MainPage> {
                 accountEmail: null, // const Text(''),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  // child: Text(account?.id ?? 'none'),
-                  // child:  NetworkImage(account?.photoUrl)
                   backgroundImage: NetworkImage(account!.photoUrl),
                 ),
                 currentAccountPictureSize: const Size(50, 50),
+              ),
+              ListTile(
+                leading: const Icon(Icons.manage_accounts),
+                title: const Text('プロフィール'),
+                onTap: () {
+                  Navigator.of(context).pushNamed(RouterPath.profilePath);
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.logout),
@@ -69,13 +74,6 @@ class _MainPageState extends ConsumerState<MainPage> {
                   ac.logout();
                   await Navigator.of(context)
                       .popAndPushNamed(RouterPath.rootPath);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.manage_accounts),
-                title: const Text('プロフィール'),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RouterPath.profilePath);
                 },
               ),
             ],

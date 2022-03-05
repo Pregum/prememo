@@ -18,8 +18,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         providerConfigs: [
           GoogleProviderConfiguration(
             clientId: dotenv.get('GOOGLE_SIGN_IN_CLIEND_ID'),
-          )
+          ),
         ],
+        actions: const [],
         avatarSize: 24,
       ),
     );
