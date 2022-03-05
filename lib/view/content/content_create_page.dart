@@ -15,8 +15,6 @@ class ContentCreatePage extends ConsumerStatefulWidget {
 class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   final _textEditingController = TextEditingController(text: '');
 
-  final _contentProvider = StateProvider<Content>((_) => Content.initialize());
-
   @override
   void initState() {
     super.initState();
@@ -26,18 +24,18 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   }
 
   void _handleContentChanged() {
-    final contentNotifier = ref.watch(_contentProvider.notifier);
+    final contentNotifier = ref.watch(contentProvider.notifier);
     print('before content: ${contentNotifier.state}');
     final updatedContent = contentNotifier.state
       ..content = _textEditingController.text;
 
-    contentNotifier.state = updatedContent;
+    contentNotifier.setContent(updatedContent);
     print('after content: ${contentNotifier.state}');
   }
 
   @override
   Widget build(BuildContext context) {
-    final content = ref.watch(_contentProvider);
+    final content = ref.watch(contentProvider);
     final TextStyle style = Theme.of(context).textTheme.titleMedium!.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.normal,
@@ -48,7 +46,16 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
           IconButton(
             onPressed: () async {
               final contentService = ref.watch(contentServiceProvider);
-              await contentService.create(Content.initialize());
+              try {
+                await contentService.create(content);
+                final snackbar =
+                    SnackBar(content: Text('作成しました！ -- id: ${content.id}'));
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                Navigator.of(context).pop();
+              } catch (e) {
+                const snackbar = SnackBar(content: Text('作成に失敗しました\u{1F600}'));
+                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+              }
             },
             icon: const Icon(Icons.save),
           )
