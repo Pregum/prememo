@@ -56,6 +56,7 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
         );
     return Scaffold(
       appBar: AppBar(
+        title: Text(content.title),
         actions: [
           IconButton(
             onPressed: () async {
