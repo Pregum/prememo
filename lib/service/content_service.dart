@@ -10,8 +10,10 @@ class ContentService {
   final instance = FirebaseFirestore.instance;
   static const collectionPath = 'contents';
 
-  Future<void> create(Content content) async {
-    await instance.collection(collectionPath).add(content.toJson());
+  Future<Content> create(Content content) async {
+    final ret = await instance.collection(collectionPath).add(content.toJson());
+    content.id = ret.id;
+    return content;
   }
 
   Future<void> update(Content content) async {

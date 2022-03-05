@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:prememo/main.dart';
 import 'package:prememo/view/auth_loading/auth_loading_page.dart';
 import 'package:prememo/view/content/content_create_page.dart';
 import 'package:prememo/view/main/main_page.dart';
+import 'package:prememo/view/profile/profile_page.dart';
 
 import 'view/sign_in/sign_in_page.dart';
 
@@ -13,6 +15,7 @@ class RouterPath {
   static const signInPath = '/sign_in';
   static const signUpPath = '/sign_up';
   static const authLoadingPath = '/auth_loading';
+  static const profilePath = '/profile';
 }
 
 class RouterGenerator {
@@ -35,6 +38,8 @@ class RouterGenerator {
         return MaterialPageRoute(builder: (_) => const ContentCreatePage());
       case RouterPath.signInPath:
         return MaterialPageRoute(builder: (_) => const SignInPage());
+      case RouterPath.profilePath:
+        return MaterialPageRoute(builder: (_) => const ProfilePage());
       case RouterPath.signUpPath:
 
       default:

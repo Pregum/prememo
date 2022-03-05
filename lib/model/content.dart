@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 class Content {
   String id;
   String title;
@@ -42,5 +45,18 @@ class Content {
       'created_at': createdAt,
       'updated_at': FieldValue.serverTimestamp(),
     };
+  }
+
+  @override
+  String toString() {
+    return 'id: $id, title: $title, content: $content';
+  }
+}
+
+extension ContentExt on DateTime {
+  String toPrettyStr() {
+    initializeDateFormatting('ja_JP');
+    final formatted = DateFormat('yyyy年MM月dd日 HH:mm', 'ja');
+    return formatted.format(this);
   }
 }
