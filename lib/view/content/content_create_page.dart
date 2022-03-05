@@ -88,6 +88,7 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
                 minWidth: MediaQuery.of(context).size.width,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Center(
                     child: Hero(
@@ -96,20 +97,28 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
                         // hero inside need material.
                         // ref: https://stackoverflow.com/questions/68599745/no-material-widget-found-hero-animation-is-not-working-with-textfield
                         type: MaterialType.transparency,
-                        child: TextField(
-                          controller: _titleEditingController,
-                          maxLength: null,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: TextField(
+                            controller: _titleEditingController,
+                            maxLength: null,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              label: const Text('タイトル'),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
                             ),
+                            // 次のカーソルへ移動
+                            // ref: https://stackoverflow.com/questions/52150677/how-to-shift-focus-to-the-next-textfield-in-flutter
+                            textInputAction: TextInputAction.next,
                           ),
                         ),
                       ),
                     ),
                   ),
+                  const Divider(),
                   Text('作成日時: ${content.createdAt.toDate().toPrettyStr()}'),
                   Text('最終更新日時: ${content.updatedAt.toDate().toPrettyStr()}'),
                   const Divider(),
@@ -117,9 +126,12 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
                     maxLength: null,
                     maxLines: null,
                     decoration: InputDecoration(
+                      label: const Text('内容'),
+                      hintText: '記入後、右上の保存ボタンで保存できます。',
                       enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                     controller: _textEditingController,

@@ -56,7 +56,7 @@ class Content {
 extension ContentExt on DateTime {
   String toPrettyStr() {
     initializeDateFormatting('ja_JP');
-    final formatted = DateFormat('yyyy月MM日dd HH:mm', 'ja');
+    final formatted = DateFormat('yyyy年MM月dd日 HH:mm', 'ja');
     return formatted.format(this);
   }
 }
