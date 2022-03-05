@@ -13,6 +13,13 @@ class ContentCreatePage extends ConsumerStatefulWidget {
 }
 
 class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
+  final _textEditingController = TextEditingController(text: '');
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final contentController = ref.watch(contentProvider);
@@ -32,18 +39,56 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Hero(
-            tag: contentController.id,
-            child: Text(
-              contentController.title,
-              style: style,
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+                minWidth: MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Center(
+                    child: Hero(
+                      tag: contentController.id,
+                      child: Text(
+                        contentController.title,
+                        style: style,
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Text(contentController.content),
+                  ),
+                  const Divider(),
+                  TextField(
+                    maxLength: null,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                    controller: _textEditingController,
+                  ),
+                ],
+              ),
             ),
           ),
-          Text(contentController.content),
-        ],
+        ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 }
