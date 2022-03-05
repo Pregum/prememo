@@ -7,19 +7,23 @@ class User {
   String name;
   Timestamp createdAt;
   Timestamp updatedAt;
+  String photoUrl;
 
-  User(
-      {required this.id,
-      required this.name,
-      required this.createdAt,
-      required this.updatedAt});
+  User({
+    required this.id,
+    required this.name,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.photoUrl,
+  });
 
   factory User.fromAuth(auth.User authUser) {
     return User(
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       id: authUser.uid,
-      name: authUser.displayName.toString(),
+      name: authUser.displayName ?? 'ゲストユーザー',
+      photoUrl: authUser.photoURL ?? '',
     );
   }
 
@@ -29,6 +33,7 @@ class User {
       updatedAt: json['updated_at'] as Timestamp? ?? Timestamp.now(),
       name: json['name'] as String? ?? '',
       id: json['id'] as String? ?? '',
+      photoUrl: json['photo_url'] as String? ?? '',
     );
   }
 
@@ -37,6 +42,7 @@ class User {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'name': name,
+      'photo_url': photoUrl,
     };
   }
 }
