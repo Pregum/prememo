@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -49,14 +50,25 @@ class _MainPageState extends ConsumerState<MainPage> {
           child: Column(
             children: [
               UserAccountsDrawerHeader(
-                accountName: Text(account?.uid ?? 'no'),
+                accountName: Text(account?.id ?? 'no'),
                 accountEmail: const Text(''),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Text(account?.uid.substring(0, 3) ?? 'none'),
+                  child: Text(account?.id ?? 'none'),
                 ),
                 currentAccountPictureSize: const Size(50, 50),
               ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('ログアウト'),
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  final ac = ref.watch(accountProvider.notifier);
+                  ac.logout();
+                  await Navigator.of(context)
+                      .popAndPushNamed(RouterPath.rootPath);
+                },
+              )
             ],
           ),
         ),
