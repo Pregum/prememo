@@ -15,14 +15,29 @@ class ContentCreatePage extends ConsumerStatefulWidget {
 class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   final _textEditingController = TextEditingController(text: '');
 
+  final _contentProvider = StateProvider<Content>((_) => Content.initialize());
+
   @override
   void initState() {
     super.initState();
+    _textEditingController.addListener(() {
+      _handleContentChanged();
+    });
+  }
+
+  void _handleContentChanged() {
+    final contentNotifier = ref.watch(_contentProvider.notifier);
+    print('before content: ${contentNotifier.state}');
+    final updatedContent = contentNotifier.state
+      ..content = _textEditingController.text;
+
+    contentNotifier.state = updatedContent;
+    print('after content: ${contentNotifier.state}');
   }
 
   @override
   Widget build(BuildContext context) {
-    final contentController = ref.watch(contentProvider);
+    final content = ref.watch(_contentProvider);
     final TextStyle style = Theme.of(context).textTheme.titleMedium!.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.normal,
@@ -55,16 +70,15 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
                 children: <Widget>[
                   Center(
                     child: Hero(
-                      tag: contentController.id,
+                      tag: content.id,
                       child: Text(
-                        contentController.title,
+                        content.title,
                         style: style,
                       ),
                     ),
                   ),
-                  Center(
-                    child: Text(contentController.content),
-                  ),
+                  Text('作成日時: ${content.createdAt.toDate().toPrettyStr()}'),
+                  Text('最終更新日時: ${content.updatedAt.toDate().toPrettyStr()}'),
                   const Divider(),
                   TextField(
                     maxLength: null,
