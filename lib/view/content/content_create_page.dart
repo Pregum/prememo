@@ -14,6 +14,7 @@ class ContentCreatePage extends ConsumerStatefulWidget {
 
 class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   final _textEditingController = TextEditingController(text: '');
+  final _titleEditingController = TextEditingController(text: '');
 
   @override
   void initState() {
@@ -21,6 +22,19 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
     _textEditingController.addListener(() {
       _handleContentChanged();
     });
+
+    final content = ref.read(contentProvider);
+    _titleEditingController.text = content.title;
+    _titleEditingController.addListener(() {
+      _handleTitleChanged();
+    });
+  }
+
+  void _handleTitleChanged() {
+    final contentNotifier = ref.watch(contentProvider.notifier);
+    final updatedContent = contentNotifier.state
+      ..title = _titleEditingController.text;
+    contentNotifier.setContent(updatedContent);
   }
 
   void _handleContentChanged() {
@@ -48,8 +62,8 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
               final contentService = ref.watch(contentServiceProvider);
               try {
                 await contentService.create(content);
-                final snackbar =
-                    SnackBar(content: Text('作成しました！ -- id: ${content.id}'));
+                final snackbar = SnackBar(
+                    content: Text('作成しました！ -- id: ${content.id} \u{1F600}'));
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 Navigator.of(context).pop();
               } catch (e) {
@@ -78,9 +92,21 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
                   Center(
                     child: Hero(
                       tag: content.id,
-                      child: Text(
-                        content.title,
-                        style: style,
+                      child: Material(
+                        // hero inside need material.
+                        // ref: https://stackoverflow.com/questions/68599745/no-material-widget-found-hero-animation-is-not-working-with-textfield
+                        type: MaterialType.transparency,
+                        child: TextField(
+                          controller: _titleEditingController,
+                          maxLength: null,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -110,6 +136,7 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    _titleEditingController.dispose();
     super.dispose();
   }
 }
