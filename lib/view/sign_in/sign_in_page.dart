@@ -29,7 +29,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           final userCredential =
               await FirebaseAuth.instance.signInAnonymously();
           print('crendential: ${userCredential.toString()}');
-          await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
         },
         child: const Text('ゲストとしてログイン'),
       ),
