@@ -5,7 +5,6 @@ import 'package:prememo/view/sign_in/sign_in_page.dart';
 import 'package:prememo/viewmodel/account_controller.dart';
 
 import '../main/main_page.dart';
-import '../../model/user.dart' as my;
 
 final streamProvider = StreamProvider.autoDispose<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();

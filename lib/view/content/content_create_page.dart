@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prememo/service/content_service.dart';
+import 'package:prememo/viewmodel/account_controller.dart';
 import 'package:prememo/viewmodel/content_controller.dart';
 
 import '../../model/content.dart';
@@ -50,6 +52,7 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
   @override
   Widget build(BuildContext context) {
     final content = ref.watch(contentProvider);
+    final account = ref.watch(accountProvider);
     final TextStyle style = Theme.of(context).textTheme.titleMedium!.copyWith(
           fontSize: 24,
           fontWeight: FontWeight.normal,
@@ -62,6 +65,7 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
             onPressed: () async {
               final contentService = ref.watch(contentServiceProvider);
               try {
+                content.userRef = account!.userRef;
                 await contentService.create(content);
                 final snackbar = SnackBar(
                     content: Text('作成しました！ -- id: ${content.id} \u{1F600}'));

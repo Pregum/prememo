@@ -25,7 +25,12 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       providerConfigs: providerConfigs,
       // ref: http://blog.wafrat.com/using-flutterfire_ui-with-unit-tests/
       footerBuilder: (context, _) => OutlinedButton(
-        onPressed: () async => await FirebaseAuth.instance.signInAnonymously(),
+        onPressed: () async {
+          final userCredential =
+              await FirebaseAuth.instance.signInAnonymously();
+          print('crendential: ${userCredential.toString()}');
+          await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+        },
         child: const Text('ゲストとしてログイン'),
       ),
       auth: FirebaseAuth.instance,

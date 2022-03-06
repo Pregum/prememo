@@ -9,6 +9,7 @@ class Content {
   String content;
   Timestamp createdAt;
   Timestamp updatedAt;
+  DocumentReference? userRef;
 
   Content({
     required this.id,
@@ -16,6 +17,7 @@ class Content {
     required this.content,
     required this.createdAt,
     required this.updatedAt,
+    required this.userRef,
   });
 
   factory Content.initialize() {
@@ -25,6 +27,7 @@ class Content {
       content: 'this sample content',
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
+      userRef: null,
     );
   }
 
@@ -35,6 +38,7 @@ class Content {
       title: json['title'] as String? ?? '',
       createdAt: json['created_at'] as Timestamp? ?? Timestamp.now(),
       updatedAt: json['updated_at'] as Timestamp? ?? Timestamp.now(),
+      userRef: json['user_ref'] as DocumentReference?,
     );
   }
 
@@ -44,12 +48,13 @@ class Content {
       'content': content,
       'created_at': createdAt,
       'updated_at': FieldValue.serverTimestamp(),
+      'user_ref': userRef,
     };
   }
 
   @override
   String toString() {
-    return 'id: $id, title: $title, content: $content';
+    return 'id: $id, title: $title, content: $content, userRef: $userRef';
   }
 }
 
