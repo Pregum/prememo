@@ -8,6 +8,7 @@ class User {
   Timestamp createdAt;
   Timestamp updatedAt;
   String photoUrl;
+  DocumentReference userRef;
 
   User({
     required this.id,
@@ -15,6 +16,7 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     required this.photoUrl,
+    required this.userRef,
   });
 
   factory User.fromAuth(auth.User authUser) {
@@ -24,16 +26,20 @@ class User {
       id: authUser.uid,
       name: authUser.displayName ?? 'ゲストユーザー',
       photoUrl: authUser.photoURL ?? '',
+      userRef: FirebaseFirestore.instance.doc('users/${authUser.uid}'),
     );
   }
 
   factory User.fromJson(Map<String, Object?> json) {
+    var id = json['id'] as String? ?? '';
     return User(
       createdAt: json['created_at'] as Timestamp? ?? Timestamp.now(),
       updatedAt: json['updated_at'] as Timestamp? ?? Timestamp.now(),
       name: json['name'] as String? ?? '',
-      id: json['id'] as String? ?? '',
+      id: id,
       photoUrl: json['photo_url'] as String? ?? '',
+      userRef: json['user_ref'] as DocumentReference? ??
+          FirebaseFirestore.instance.doc('users/$id'),
     );
   }
 
@@ -43,6 +49,7 @@ class User {
       'updated_at': updatedAt,
       'name': name,
       'photo_url': photoUrl,
+      'user_ref': userRef
     };
   }
 }

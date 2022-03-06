@@ -31,6 +31,25 @@ class ContentService {
     return Content.fromJson({'id': id, ...json.data()!});
   }
 
+  Future<List<Content>> getByRef(DocumentReference ref) async {
+    try {
+      final jsons = await instance
+          .collection(collectionPath)
+          .where('user_ref', isEqualTo: ref)
+          .get();
+      if (jsons.docs.isEmpty) {
+        return [];
+      } else {
+        final contents = jsons.docs
+            .map((e) => Content.fromJson({'id': e.id, ...e.data()}))
+            .toList();
+        return contents;
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<Content>> getAll() async {
     final querySnapshot = await instance.collection(collectionPath).get();
     if (querySnapshot.docs.isEmpty) {
