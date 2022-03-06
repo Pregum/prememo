@@ -16,11 +16,23 @@ class ContentService {
     return content;
   }
 
+  Future<Content> set(Content content) async {
+    await instance
+        .collection(collectionPath)
+        .doc(content.id)
+        .set(content.toJson());
+    return content;
+  }
+
   Future<void> update(Content content) async {
     await instance
         .collection(collectionPath)
         .doc(content.id)
         .update(content.toJson());
+  }
+
+  Future<void> delete(Content content) async {
+    await instance.collection(collectionPath).doc(content.id).delete();
   }
 
   Future<Content> get(String id) async {

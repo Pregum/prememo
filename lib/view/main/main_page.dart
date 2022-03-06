@@ -47,9 +47,10 @@ class _MainPageState extends ConsumerState<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.create),
-        onPressed: () {
+        onPressed: () async {
           contentController.setContent(Content.initialize());
-          Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
+          await Navigator.of(context).pushNamed(RouterPath.contentCreatePath);
+          ref.refresh(contentFutureProvider);
         },
       ),
       drawer: Drawer(
@@ -113,13 +114,14 @@ class _MainPageState extends ConsumerState<MainPage> {
                     padding: const EdgeInsets.all(1.0),
                     child: Material(
                       child: InkWell(
-                        onTap: () {
+                        onLongPress: () => _showMenu(currData),
+                        onTap: () async {
                           final contentController =
                               ref.watch(contentProvider.notifier);
                           contentController.setContent(
                             currData,
                           );
-                          Navigator.of(context)
+                          await Navigator.of(context)
                               .pushNamed(RouterPath.contentCreatePath);
                         },
                         child: SizedBox(
@@ -151,5 +153,47 @@ class _MainPageState extends ConsumerState<MainPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showMenu(Content selectedData) async {
+    var result = await showModalBottomSheet<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('削除'),
+              onTap: () => Navigator.of(context).pop(1),
+            )
+          ],
+        );
+      },
+    );
+
+    if (result == null) {
+      return;
+    }
+
+    final contentService = ref.watch(contentServiceProvider);
+    await contentService.delete(selectedData);
+
+    final snackbar = SnackBar(
+      content: Text('削除されました -- $selectedData'),
+      action: SnackBarAction(
+        label: '元に戻す',
+        onPressed: () async {
+          await contentService.set(selectedData);
+          final undoSnack = SnackBar(
+            content: Text('元に戻しました -- $selectedData'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(undoSnack);
+          ref.refresh(contentFutureProvider);
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    ref.refresh(contentFutureProvider);
   }
 }
