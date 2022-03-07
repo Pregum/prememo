@@ -66,13 +66,19 @@ class _ContentCreatePageState extends ConsumerState<ContentCreatePage> {
               final contentService = ref.watch(contentServiceProvider);
               try {
                 content.userRef = account!.userRef;
-                await contentService.create(content);
+                final isNewContent = content.id.isEmpty;
+                if (isNewContent) {
+                  await contentService.create(content);
+                } else {
+                  await contentService.update(content);
+                }
                 final snackbar = SnackBar(
-                    content: Text('作成しました！ -- id: ${content.id} \u{1F600}'));
+                    content: Text(
+                        '${isNewContent ? '更新しました！' : '作成しました！'} -- id: ${content.id} \u{1F600}'));
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
                 Navigator.of(context).pop();
               } catch (e) {
-                const snackbar = SnackBar(content: Text('作成に失敗しました\u{1F600}'));
+                const snackbar = SnackBar(content: Text('処理に失敗しました \u{1F600}'));
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
               }
             },
